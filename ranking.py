@@ -1,5 +1,6 @@
 import kenlm
 import sys
+from collections import deque
 
 class Ranker:
     def __init__(self, filename):
@@ -27,7 +28,7 @@ class Ranker:
         return tokens
     
     def get_probability(self, tokens):
-        # deque
+        q = deque();
         # trim each token
         # first put an n-gram in the queue
         # go through each element of tokens (pop front & push new back)
