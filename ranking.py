@@ -8,7 +8,10 @@ class Ranker:
         model = kenlm.LanguageModel(filename)
         # get ngram size
         max_ngram = model.order
-        # oov stuff
+        # Find out-of-vocabulary words
+        #for w in words:
+        #    if not w in model:
+        #        print('"{0}" is an OOV'.format(w))
         # set significant decimal point
     
     def parse_line(self, line):
@@ -86,11 +89,6 @@ def main():
         print('{0} {1}: {2}'.format(prob, length, ' '.join(words[i+2-length:i+2])))
         if oov:
             print('\t"{0}" is an OOV'.format(words[i+1]))
-
-    # Find out-of-vocabulary words
-    for w in words:
-        if not w in model:
-            print('"{0}" is an OOV'.format(w))
 
     #Stateful query
     state = kenlm.State()
