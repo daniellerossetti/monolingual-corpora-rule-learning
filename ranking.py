@@ -1,13 +1,15 @@
 import kenlm
+import sys
 
 class Ranker:
     def __init__(self, filename):
         #do try and pass
         # create language model
+        model = kenlm.LanguageModel(filename)
         # get ngram size
+        max_ngram = model.order
         # oov stuff
         # set significant decimal point
-        pass
     
     def parse_line(self, line):
         # remove ].[] from subline number 
@@ -63,9 +65,15 @@ def score(s):
      return sum(prob for prob, _, _ in model.full_scores(s))
 
 def main():
-    model = kenlm.LanguageModel(argv[1])
-    print('{0}-gram model'.format(model.order))
-
+    if len(sys.argv) != 2:
+        print("Error: wrong number of arguments.")
+        print("Usage: ranking.py <kenlm-binary-lm-file>")
+        sys.exit(1)
+    
+    ranker = Ranker(sys.argv[1])
+    ranker.fractional()
+    
+    """
     sentence = 'language modeling is fun .'
     print(sentence)
     print(model.score(sentence))
@@ -97,3 +105,4 @@ def main():
     assert (abs(accum - model.score("a sentence", eos = False)) < 1e-3)
     accum += model.BaseScore(state, "</s>", state2)
     assert (abs(accum - model.score("a sentence")) < 1e-3)
+    """
