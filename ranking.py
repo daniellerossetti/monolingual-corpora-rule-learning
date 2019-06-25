@@ -32,8 +32,8 @@ class Ranker:
         pass
     
     def trim(self, input):
-        # remove white space and unknown words
-        pass
+        # remove white space and unknown words (really just *?)
+        return input.translate(input.maketrans('', '', ), '\n\t\v\f\r *')
     
     def print_results(self):
         if not self.probabilities.empty():
