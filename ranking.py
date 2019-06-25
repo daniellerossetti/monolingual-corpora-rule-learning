@@ -28,14 +28,20 @@ class Ranker:
         return tokens
     
     def get_probability(self, tokens):
-        q = deque();
+        ngram = deque() # should behave as a queue
         # trim each token
+        for i in range(len(tokens)): tokens[i] = trim(tokens[i])
         # first put an n-gram in the queue
-        # go through each element of tokens (pop front & push new back)
-        #       create n-gram object
-        #       get the probability of n-gram
-        # return probability
-        pass
+        for i in range(len(self.max_ngram)):
+            ngram.append(tokens[i])
+        probability = 0
+        for i in range(len(self.max_ngram), len(tokens)):
+            # get the probability of n-gram
+            probability += self.model.score(" ".join(list(ngram)))
+            # pop front and push back a new word
+            ngram.popleft()
+            ngram.append(tokens[i])
+        return probability
     
     def trim(self, input):
         # remove white space and unknown words (really just *?)
