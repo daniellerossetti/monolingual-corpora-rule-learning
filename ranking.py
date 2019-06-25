@@ -36,32 +36,34 @@ class Ranker:
         pass
     
     def print_results(self):
-        # if self.probabilities:
-        #   print them out in ranking order by probability
-        #   sort
-        #   print i (rank), prob.first (prob), prob.second (line)
-        # final \n
-        pass
+        if not self.probabilities.empty():
+            # sort them by probability ranking order
+            sorted_probs = self.probabilities.sort()
+            for i, prob in enumerate(sorted_probs):
+                # rank, prob, line
+                print(i + '\t' + sorted_probs[i][0] + '\t' + sorted_probs[i][1])
+        print()
     
     def normalize_probabilities(self):
-        # norm = adding all probs
+        # norm = sum of all probs
+        norm = 0
+        for prob in self.probabilities: norm += prob
         # divide each prob by norm
-        pass
+        for prob in self.probabilities: prob = prob/norm
     
     def fractional(self):
-        # while not the end of file:
-        #   get line
-        #   if len(line) #because last line in file is empty
-        #       tokens = parse_line(line)
-        #       if tokens[0] == 0
-        #           normalize_probabilities
-        #           print_results
-        #           clear self.probs
-        #       remove line num from tokens
-        #       prob = this->get_probability(tokens)
-        #       self.probs.((prob, line))
-        #   normalize_probabilities
-        #   print_results
+        for line in sys.stdin:
+            if len(line): # because last line in file can be empty
+                tokens = self.parse_line(line)
+                if tokens.pop(0) == 0: # line num
+                    self.normalize_probabilities()
+                    self.print_results()
+                    self.probabilities.clear()
+                tokens.remove
+                prob = self.get_probability(tokens)
+                self.probabilities((prob, line))
+        self.normalize_probabilities()
+        self.print_results()
     
 # Check that total full score = direct score
 def score(s):
