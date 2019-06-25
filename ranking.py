@@ -3,23 +3,28 @@ import sys
 
 class Ranker:
     def __init__(self, filename):
-        #do try and pass
-        # create language model
-        model = kenlm.LanguageModel(filename)
-        # get ngram size
-        max_ngram = model.order
-        # Find out-of-vocabulary words
-        #for w in words:
-        #    if not w in model:
-        #        print('"{0}" is an OOV'.format(w))
-        # set significant decimal point
+        try:
+            # create language model
+            self.model = kenlm.LanguageModel(filename)
+            # get ngram size
+            self.max_ngram = model.order
+            # Find out-of-vocabulary words
+            #for w in words:
+            #    if not w in model:
+            #        print('"{0}" is an OOV'.format(w))
+            # set significant decimal point
+        except:
+            print('Error: loading of language model failed.')
+            sys.exit(1)
     
     def parse_line(self, line):
-        # remove ].[] from subline number 
-        # don't want to add .[][ from beginning
         # make a list out of the sentence
-        # return tokens
-        pass
+        tokens = line.split()
+        # remove .[][ from beginning
+        tokens.pop(0)
+        # remove ].[] from subline number 
+        tokens[1] = tokens[1].strip().strip('].[]')
+        return tokens
     
     def get_probability(self, tokens):
         # deque
