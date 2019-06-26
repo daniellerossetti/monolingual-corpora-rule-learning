@@ -89,6 +89,8 @@ def main():
     ranker = Ranker(sys.argv[1])
     ranker.fractional()
     
+if __name__ == "__main__":
+    main()
     """
     sentence = 'language modeling is fun .'
     print(sentence)
