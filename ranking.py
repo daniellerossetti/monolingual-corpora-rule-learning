@@ -8,7 +8,7 @@ class Ranker:
             # create language model
             self.model = kenlm.LanguageModel(filename)
             # get ngram size
-            self.max_ngram = model.order
+            self.max_ngram = self.model.order
             # Find out-of-vocabulary words
             #for w in words:
             #    if not w in model:
@@ -30,7 +30,7 @@ class Ranker:
     def get_probability(self, tokens):
         ngram = deque() # should behave as a queue
         # trim each token
-        for i in range(len(tokens)): tokens[i] = trim(tokens[i])
+        for i in range(len(tokens)): tokens[i] = self.trim(tokens[i])
         # first put an n-gram in the queue
         for i in range(len(self.max_ngram)): ngram.append(tokens[i])
        
@@ -91,7 +91,7 @@ def main():
     
 if __name__ == "__main__":
     main()
-    """
+"""
     sentence = 'language modeling is fun .'
     print(sentence)
     print(model.score(sentence))
@@ -118,4 +118,4 @@ if __name__ == "__main__":
     assert (abs(accum - model.score("a sentence", eos = False)) < 1e-3)
     accum += model.BaseScore(state, "</s>", state2)
     assert (abs(accum - model.score("a sentence")) < 1e-3)
-    """
+"""
