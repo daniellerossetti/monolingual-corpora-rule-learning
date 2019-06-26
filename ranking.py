@@ -32,8 +32,8 @@ class Ranker:
         # trim each token
         for i in range(len(tokens)): tokens[i] = trim(tokens[i])
         # first put an n-gram in the queue
-        for i in range(len(self.max_ngram)):
-            ngram.append(tokens[i])
+        for i in range(len(self.max_ngram)): ngram.append(tokens[i])
+       
         probability = 0
         for i in range(len(self.max_ngram), len(tokens)):
             # get the probability of n-gram
@@ -71,9 +71,8 @@ class Ranker:
                     self.normalize_probabilities()
                     self.print_results()
                     self.probabilities.clear()
-                tokens.remove
                 prob = self.get_probability(tokens)
-                self.probabilities((prob, line))
+                self.probabilities.append((prob, line))
         self.normalize_probabilities()
         self.print_results()
     
