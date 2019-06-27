@@ -1,9 +1,11 @@
 import kenlm
 import sys
+import re
 from collections import deque
 
 class Ranker:
     def __init__(self, filename):
+        self.probabilities = []
         try:
             # create language model
             self.model = kenlm.LanguageModel(filename)
@@ -24,7 +26,7 @@ class Ranker:
         # remove .[][ from beginning
         tokens.pop(0)
         # remove ].[] from subline number 
-        tokens[1] = tokens[1].strip().strip('].[]')
+        tokens[0] = int(tokens[0].strip('].[]'))
         return tokens
     
     def get_probability(self, tokens):
@@ -34,34 +36,37 @@ class Ranker:
         # first put an n-gram in the queue
         for i in range(len(self.max_ngram)): ngram.append(tokens[i])
        
-        probability = 0
-        for i in range(len(self.max_ngram), len(tokens)):
-            # get the probability of n-gram
-            probability += self.model.score(" ".join(list(ngram)))
-            # pop front and push back a new word
-            ngram.popleft()
-            ngram.append(tokens[i])
+        if len(tokens) > self.max_ngram:
+            probability = 0
+            for i in range(len(self.max_ngram), len(tokens)):
+                # get the probability of n-gram
+                probability += self.model.score(" ".join(list(ngram)))
+                # pop front and push back a new word
+                ngram.popleft()
+                ngram.append(tokens[i])
+        else:
+            probability = self.model.score(" ".join(tokens))
         return probability
     
     def trim(self, input):
         # remove white space and unknown words (really just *?)
-        return input.translate(input.maketrans('', '', ), '\n\t\v\f\r *')
+        return re.sub('[\n\t\v\f\r *]', '', input)
     
     def print_results(self):
-        if not self.probabilities.empty():
+        if self.probabilities:
             # sort them by probability ranking order
-            sorted_probs = self.probabilities.sort()
-            for i, prob in enumerate(sorted_probs):
+            self.probabilities.sort()
+            for i, tup in enumerate(self.probabilities):
                 # rank, prob, line
-                print(i + '\t' + sorted_probs[i][0] + '\t' + sorted_probs[i][1])
-        print()
+                print('\t'.join([str(i), str(tup[0]), str(tup[1].strip('\n'))
+            print()
     
     def normalize_probabilities(self):
         # norm = sum of all probs
         norm = 0
-        for prob in self.probabilities: norm += prob
+        for (prob, _) in self.probabilities: norm += prob
         # divide each prob by norm
-        for prob in self.probabilities: prob = prob/norm
+        for (prob, _) in self.probabilities: prob = prob/norm
     
     def fractional(self):
         for line in sys.stdin:
@@ -104,18 +109,4 @@ if __name__ == "__main__":
         print('{0} {1}: {2}'.format(prob, length, ' '.join(words[i+2-length:i+2])))
         if oov:
             print('\t"{0}" is an OOV'.format(words[i+1]))
-
-    #Stateful query
-    state = kenlm.State()
-    state2 = kenlm.State()
-    #Use <s> as context.  If you don't want <s>, use model.NullContextWrite(state).
-    model.BeginSentenceWrite(state)
-    accum = 0.0
-    accum += model.BaseScore(state, "a", state2)
-    accum += model.BaseScore(state2, "sentence", state)
-    #score defaults to bos = True and eos = True.  Here we'll check without the end
-    #of sentence marker.  
-    assert (abs(accum - model.score("a sentence", eos = False)) < 1e-3)
-    accum += model.BaseScore(state, "</s>", state2)
-    assert (abs(accum - model.score("a sentence")) < 1e-3)
 """
