@@ -13,7 +13,7 @@ cat <source-language-corpus> | apertium-destxt | apertium -f none -d /path/to/di
 ```
 cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -b -f -t -n > <lang-pair>.ambig
 ```
-3. Translate, score, and rank all possible disambiguation paths (**warning**: this will create a very large file. a corpus of 30MB generated a 8GB file in this step):
+3. Translate, score, and rank all possible disambiguation paths (**warning**: this will create a very large file. a corpus of 30MB with ~200,000 lines generated a 8GB file in this step):
 ```
 cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -m -f -n |
 apertium -f none -d /path/to/dir/of/language/pair <lang-pair>-multi | python3 ranking.py /path/to/binary/lang/model > <lang-pair>.ranked
