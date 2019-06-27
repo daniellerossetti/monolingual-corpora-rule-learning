@@ -34,11 +34,11 @@ class Ranker:
         # trim each token
         for i in range(len(tokens)): tokens[i] = self.trim(tokens[i])
         # first put an n-gram in the queue
-        for i in range(len(self.max_ngram)): ngram.append(tokens[i])
+        for i in range(self.max_ngram): ngram.append(tokens[i])
        
         if len(tokens) > self.max_ngram:
             probability = 0
-            for i in range(len(self.max_ngram), len(tokens)):
+            for i in range(self.max_ngram, len(tokens)):
                 # get the probability of n-gram
                 probability += self.model.score(" ".join(list(ngram)))
                 # pop front and push back a new word
