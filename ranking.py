@@ -80,10 +80,6 @@ class Ranker:
                 self.probabilities.append((prob, line))
         self.normalize_probabilities()
         self.print_results()
-    
-# Check that total full score = direct score
-def score(s):
-     return sum(prob for prob, _, _ in model.full_scores(s))
 
 def main():
     if len(sys.argv) != 2:
@@ -97,12 +93,6 @@ def main():
 if __name__ == "__main__":
     main()
 """
-    sentence = 'language modeling is fun .'
-    print(sentence)
-    print(model.score(sentence))
-
-    assert (abs(score(sentence) - model.score(sentence)) < 1e-3)
-
     # Show scores and n-gram matches
     words = ['<s>'] + sentence.split() + ['</s>']
     for i, (prob, length, oov) in enumerate(model.full_scores(sentence)):
