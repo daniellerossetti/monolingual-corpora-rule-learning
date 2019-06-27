@@ -58,7 +58,7 @@ class Ranker:
             self.probabilities.sort()
             for i, tup in enumerate(self.probabilities):
                 # rank, prob, line
-                print('\t'.join([str(i), str(tup[0]), str(tup[1].strip('\n'))
+                print('\t'.join([str(i), str(tup[0]), str(tup[1].strip('\n'))])
             print()
     
     def normalize_probabilities(self):
