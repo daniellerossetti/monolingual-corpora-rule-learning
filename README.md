@@ -9,11 +9,11 @@ This page describes how to generate lexical selection rules without relying on a
 ```
 cat <source-language-corpus> | apertium-destxt | apertium -f none -d /path/to/dir/of/language/pair <lang-pair>-pretransfer > <lang-pair>.tagged
 ```
-2. Make an ambiguous version of your corpus and trim redundant tags:
+2. Make an ambiguous version of your corpus:
 ```
-cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -b -f -t -n > <lang-pair>.ambig
+cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -b -f -n > <lang-pair>.ambig
 ```
-3. Translate, score, and rank all possible disambiguation paths (**warning**: this will create a very large file. a corpus of 30MB with ~200,000 lines generated a 8.7GB file in this step):
+3. Translate and score all possible disambiguation paths (**warning**: this will create a very large file. a corpus of 30MB with ~200,000 lines generated a 8.7GB file in this step):
 ```
 cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -m -f -n |
 apertium -f none -d /path/to/dir/of/language/pair <lang-pair>-multi | python3 ranking.py /path/to/binary/lang/model > <lang-pair>.ranked
@@ -22,11 +22,7 @@ apertium -f none -d /path/to/dir/of/language/pair <lang-pair>-multi | python3 ra
 ```
 python3 counting.py <lang-pair>.ranked > <lang.pair>.freq
 ```
-5. Align the tagged ambiguous version and the ranked version of the corpus so you know the tags:
-```
-python3 matching.py <lang-pair>.ambig <lang-pair>.ranked > <lang-pair>.aligned
-```
-6. Finally, we generate and compile lexical selection rules!
+5. Finally, we generate and compile lexical selection rules!
 ```
 python3 creating.py <input-files> > <lang-pair>.rules
 lrx-comp <lang-pair>.rules.lrx <lang-pair>.rules.lrx.bin
