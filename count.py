@@ -25,7 +25,7 @@ def insert_ngrams(ngrams, freq, sl, tl, prob):
       freq[sl][ngram][tl] += prob
 
 def wrap(lst):
-  return '$ ^'.join(lst)
+  return '^' + '$ ^'.join(lst) + '$'
 
 def get_ngrams(words, i, max_ngrams, ngrams):
    if max_ngrams == 2:
@@ -85,15 +85,7 @@ def main():
           max_ngrams = 5
           ngrams = []
           get_ngrams(tokens, i, max_ngrams, ngrams)
-
-          ''' 
-          for j in range(1, 6): # max ngrams has to come from somewhere
-            # subject to change
-            pregram = '^' + '$ ^'.join(tokens[i-j:i+1]) + '$'
-            midgram = '^' + '$ ^'.join(tokens[i:i+j+1]) + '$'
-            postgram = '^' +  '$ ^'.join(tokens[i-j:i+j+1]) + '$'  
-          '''
-
+          
           split = tokens[i].split('/')
           sl, tl = split[0], split[1]
 
