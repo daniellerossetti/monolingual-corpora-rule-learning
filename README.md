@@ -3,27 +3,55 @@ This page describes how to generate lexical selection rules without relying on a
 ## Pre-requisites
 - apertium-lex-tools (for now it's needed for multitrans)
 - kenlm and a binary kenlm target language model
-- a language pair that has the following two modes: **-multi** and **-pretransfer** (see apertium-mk-en/modes.xml if you want to recreate these modes in a language pair!)
+- a language pair that has the following two modes: **-expand-tagged** and **-gen-ambig**
 ## Instructions
-1. Make a tagged version of your source language corpus:
+1 . Score all possible translations for each sentence using the language model:
 ```
-cat <source-language-corpus> | apertium-destxt | apertium -f none -d /path/to/dir/of/language/pair <lang-pair>-pretransfer > <lang-pair>.tagged
+python3 score.py <corpus> <binary-kenlm-model> <transducer-path> <language-pair> > example.scored
 ```
-2. Make an ambiguous version of your corpus:
+2. Count and score the n-grams surrounding ambiguous words:
 ```
-cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -b -f -n > <lang-pair>.ambig
+cat example.scored | python3 count.py  > example.counted
 ```
-3. Translate and score all possible disambiguation paths (**warning**: this will create a very large file. a corpus of 30MB with ~200,000 lines generated a 8.7GB file in this step):
+3. Generate lexical selection rules:
 ```
-cat <lang-pair>.tagged | /path/to/apertium-lex-tools/./multitrans /path/to/dir/of/language/pair/<lang-pair>.autobil.bin -m -f -n |
-apertium -f none -d /path/to/dir/of/language/pair <lang-pair>-multi | python3 ranking.py /path/to/binary/lang/model > <lang-pair>.ranked
+cat example.counted | python3 create.py > example.rules
+lrx-comp example.rules.lrx example.rules.lrx.bin
 ```
-4. Now we have a pseudo-parallel corpus where each possible translation is scored. Extract a frequency lexicon and ngrams:
+## Caution
+Using ```score.py``` creates a very, very large file. It is recommended that these three scripts are used as a pipeline:
 ```
-python3 counting.py <lang-pair>.ranked > <lang.pair>.freq
+python3 score.py <corpus> <binary-kenlm-model> <transducer-path> <language-pair> > python3 count.py > python3 create.py > example.rules
+lrx-comp example.rules.lrx example.rules.lrx.bin
 ```
-5. Finally, we generate and compile lexical selection rules!
+## How to create -expanded-tagged and -gen-ambig modes
 ```
-python3 creating.py <input-files> > <lang-pair>.rules
-lrx-comp <lang-pair>.rules.lrx <lang-pair>.rules.lrx.bin
+<mode name="en-pt-expand-tagged" install="yes">
+    <pipeline>
+      <program name="lt-proc">
+        <file name="en-pt.automorf.bin"/>
+      </program>
+      <program name="apertium-tagger -g $2">
+        <file name="en-pt.prob"/>
+      </program>
+      <program name="new_multitrans -m -t">
+        <file name="en-pt.autobil.bin"/>
+      </program>
+    </pipeline>
+  </mode>
+  
+  <mode name="en-pt-expand-tagged" install="yes">
+    <pipeline>
+      <program name="lt-proc">
+        <file name="en-pt.automorf.bin"/>
+      </program>
+      <program name="apertium-tagger -g $2">
+        <file name="en-pt.prob"/>
+      </program>
+      <program name="new_multitrans -m">
+        <file name="en-pt.autobil.bin"/>
+      </program>
+    </pipeline>
+  </mode>
 ```
+
