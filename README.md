@@ -24,7 +24,7 @@ Using ```score.py``` creates a very, very large file. It is recommended that the
 python3 score.py <corpus> <binary-kenlm-model> <transducer-path> <language-pair> | python3 count.py | python3 create.py > example.rules
 lrx-comp example.rules.lrx example.rules.lrx.bin
 ```
-## How to create -expanded-tagged and -gen-ambig modes
+## How to create -expand-tagged and -gen-ambig modes
 ```
 <mode name="en-pt-expand-tagged" install="yes">
     <pipeline>
