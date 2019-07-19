@@ -19,7 +19,7 @@ cat example.counted | python3 create.py > example.rules
 lrx-comp example.rules.lrx example.rules.lrx.bin
 ```
 ## Caution
-Using ```score.py``` creates a very, very large file. It is recommended that these three scripts are used as a pipeline:
+Using ```score.py``` creates a very, very large file. Using 200,000 lines of corpora resulted in a 70GB output file. It is recommended that these three scripts are used as a pipeline:
 ```
 python3 score.py <corpus> <binary-kenlm-model> <transducer-path> <language-pair> | python3 count.py | python3 create.py > example.rules
 lrx-comp example.rules.lrx example.rules.lrx.bin
