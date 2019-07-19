@@ -1,8 +1,8 @@
 # Generating lexical-selection rules from monolingual corpora
 This page describes how to generate lexical selection rules without relying on a parallel corpus. 
 ## Pre-requisites
-- apertium-lex-tools (for now it's needed for multitrans)
-- kenlm and a binary kenlm target language model
+- [apertium-lex-tools](https://github.com/apertium/apertium-lex-tools) (for now it's needed for multitrans)
+- [kenlm](https://kheafield.com/code/kenlm/) and a binary kenlm target language model
 - a language pair that has the following two modes: **-expand-tagged** and **-gen-ambig**
 ## Instructions
 1 . Score all possible translations for each sentence using the language model:
