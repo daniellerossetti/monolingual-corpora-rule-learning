@@ -1,6 +1,8 @@
 # biltrans-extract-frac-freq.py + biltrans-count-patterns-ngrams.py + ngram-pruning-frac.py
 import sys
 
+not_wanted = ['<guio>', '<sent>', '<cm>', '^$', '*']
+
 def get_ambiguous(lines):
   ambiguous = set()
   for i in range(1, len(lines)):
@@ -29,97 +31,76 @@ def wrap(lst):
 
 def get_ngrams(words, i, max_ngrams, ngrams):
    if max_ngrams == 2:
-     ngrams += [wrap(words[i-1:i+1]), wrap(words[i:i+2])]
+     for ngram in [wrap(words[i-1:i+1]), wrap(words[i:i+2])]:
+       add = True
+       for item in not_wanted:
+         if item in ngram:
+          add = False
+       if add: ngrams += [ngram]
    else:
      for j in range(max_ngrams):
-        ngrams += [wrap(words[i+j-max_ngrams+1:i+j+1])]
+        add = True
+        ngram = wrap(words[i+j-max_ngrams+1:i+j+1])
+        for item in not_wanted:
+          if item in ngram:
+            add = False
+        if add: ngrams += [ngram]
      get_ngrams(words, i, max_ngrams-1, ngrams)
 
+def progress_bar(progress, length):
+    percentage = '{:.1f}'.format(100*progress/length)
+    stars = int(50*progress/length)
+    ratio = str(progress) + '/' + str(length)
+    out = '[{}{}] {}% {}'.format(stars*'=', (50-stars)*'-', percentage, ratio)
+    print(out, file=sys.stderr, end='\r')
+
 def main():
-  scored = open(sys.argv[1], 'r')
-  
-  #onegrams = {}
   frequency = {}
-  line = scored.readline()
+  line = sys.stdin.readline()
+  progress = 0
   while line != '':
     possibilities = []
     
     # there's an empty line between each group of lines in scored
     while line != '\n':
       possibilities.append(line)
-      line = scored.readline()
+      line = sys.stdin.readline()
     
-    # get ambiguous indices 
-    #ambiguous_indices = possibilities.pop(0).split(',')
-    
-    # to get the defaults
-    #for line in possibilities:
-    #  try: line = line.lower()
-    #  except: pass
-
-    #  words = line.split('$ ^')
-    #  for i, word in enumerate(words):
-    #    if i in ambiguous_indices:
-    #      sl, tl = word.split('/')
-    #      if sl not in onegrams:
-    #        onegrams[sl] = {}
-
-    #      if tl not in onegrams[sl]:
-    #        onegrams[sl][tl] = prob
-    #      else:
-    #        onegrams[sl][tl] += prob  
-
     # getting n-grams
     ambiguous = get_ambiguous(possibilities)
     for line in possibilities:
       try: line = line.lower()
       except: pass
       
-      prob = float(line.split('\t')[0]) # subject to change
-      line = line.split('\t')[2]
-      tokens = [word for word in line.split('$ ^')]
+      prob = float(line.split('\t')[0])
+      line = line.strip().split('\t')[2]
+      tokens = [token for token in line.split('$ ^')]
+
+      # get only source language side of words
+      words = [word.split('/')[0] for word in tokens]
 
       for i in range(len(tokens)):
         if tokens[i] in ambiguous:
-          # max ngrams has to come from somewhere
-          max_ngrams = 5
+          max_ngrams = 5 # has to come from somewhere
           ngrams = []
-          get_ngrams(tokens, i, max_ngrams, ngrams)
-          
-          split = tokens[i].split('/')
-          sl, tl = split[0], split[1]
-
+          get_ngrams(words, i, max_ngrams, ngrams)
+          sl = words[i]
+          tl = tokens[i].split('/')[1]
           insert_ngrams(ngrams, frequency, sl, tl, prob) 
-    line = scored.readline()
-
-
-  # getting defaults
-  #defaults = {}
-  #for sl in onegrams:
-  #  highest = 0
-  #  for tl in onegrams[sl]:
-  #    if onegrams[sl][tl] > highest:
-  #      highest = onegrams[sl][tl]
-  #      default = tl
-  #  defaults[sl] = default
-
-  # printing n-grams
-  #for word in frequency:
-  #  for ngram in frequency[word]:
-  #    print('{}\t{}\t{}'.format(word, ngram, frequency[word][ngram]))
+    
+    progress += 1
+    progress_bar(progress, 200000)
+    line = sys.stdin.readline()
 
   for sl in frequency:
     for ngram in frequency[sl]:
-      total, max_freq = 0, 0
-      for tl in frequency[sl][ngram]:
-        if frequency[sl][ngram][tl] > max_freq:
-          max_freq = frequency[sl][ngram][tl]
-          max_tl = tl
-        total += frequency[sl][ngram][tl]
+      freq_list  = [(tl, freq) for tl, frequency[sl][ngram][tl] in frequency[sl][ngram]]
+      total = sum([freq for _, freq in freq_list])
+      max_tl, max_freq = max(freq_list, key=lambda x: x[1])
       
-      crisp = str(frequency[sl][ngram][max_tl]/total)
+      crisp = str(float(max_freq)/float(total))
       # printing output of ngram-pruning-frac.py
-      print('\t'.join([crisp, str(max_freq), ngram, sl, max_tl]))
+      print('\t'.join([crisp, str(max_freq), ngram.strip('\n'), sl, max_tl]))
 
 if __name__ == "__main__":
   main()
