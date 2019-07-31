@@ -29,6 +29,7 @@ Expect this program to run for many hours. Using 200,000 lines of corpora,
  - ```count.py``` took approximately 3 hours
  - ```create.py``` took approximately 20 minutes
 ## How to create -expand-tagged and -gen-ambig modes
+Make sure you have an updated version of apertium-lex-tools, where ```multitrans.cc``` has its option flags before the .bin file and not the other way around.
 ```
   <mode name="en-pt-expand-tagged" install="yes">
     <pipeline>
