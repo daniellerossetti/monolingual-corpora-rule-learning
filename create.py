@@ -5,7 +5,7 @@ ngrams =
 
 print('<rules>')
 ruleno = 0
-for line in infile.readlines(): 
+for line in sys.stdin.readlines():
     row = line.strip().split('\t')
     try:
     	weight = row[0] # aka crisp
