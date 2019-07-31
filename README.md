@@ -25,9 +25,9 @@ python3 score.py <corpus> <binary-kenlm-model> <transducer-path> <language-pair>
 lrx-comp example.rules.lrx example.rules.lrx.bin
 ```
 Expect this program to run for many hours. Using 200,000 lines of corpora, 
-*```score.py``` took approximately 14 hours
-*```count.py``` took approximately 3 hours
-*```create.py``` took approximately 20 minutes
+ - ```score.py``` took approximately 14 hours
+ - ```count.py``` took approximately 3 hours
+ - ```create.py``` took approximately 20 minutes
 ## How to create -expand-tagged and -gen-ambig modes
 ```
 <mode name="en-pt-expand-tagged" install="yes">
