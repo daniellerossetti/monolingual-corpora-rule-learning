@@ -1,8 +1,7 @@
 import kenlm
 import sys
 import re
-import queue
-from threading import Thread, Barrier, Lock
+from threading import Thread, Barrier
 from subprocess import check_output, Popen, PIPE, run
 from collections import deque
 
@@ -23,7 +22,7 @@ class Scorer:
         ngram = deque() # should behave as a queue
 
         # trim each token
-        for i in range(len(tokens)): tokens[i] = self.trim(tokens[i])
+        for i in range(len(tokens)): tokens[i] = trim(tokens[i])
        
         if len(tokens) > self.max_ngram:
           # first put an n-gram in the queue
@@ -40,10 +39,6 @@ class Scorer:
             probability = self.model.score(' '.join(tokens))
 
         return probability
-    
-    def trim(self, string):
-        # remove white space and unknown words (really just *?)
-        return re.sub('[\n\t\v\f\r *]', '', string)
     
     def print_results(self):
         if self.probabilities:
@@ -65,91 +60,87 @@ class Scorer:
     
     def fractional(self, corpus_file):
         # progress bar things
-        cmd = ['wc', '-l', corpus_file]
-        corpus_length = int(check_output(cmd).split()[0])
         progress = 0
+        corpus_length = int(check_output(['wc', '-l', corpus_file]).split()[0])
         
-        #cmd = ['apertium', '-d', self.transducer, self.lang_pair + '-expand-tagged']
-        #tt = Popen(cmd, stdin=PIPE, stdout=PIPE, universal_newlines=True)
-
-        #cmd = ['apertium', '-d', self.transducer, self.lang_pair + '-gen-ambig']
-        #gen = Popen(cmd, stdin=PIPE, stdout=PIPE, universal_newlines=True)
+        # commands for getting tagged trimmed and generate ambiguous lines
+        cmd = ['apertium', '-d', self.transducer]
+        tt_cmd = cmd + [self.lang_pair + '-expand-tagged']
+        gen_cmd = cmd + [self.lang_pair + '-gen-ambig']
 
         with open(corpus_file, 'r') as corpus:
-          line = corpus.readline()
-          while line:
-            tt_lines, gen_lines = [], []
-            # 1) gets tagged trimmed version of corpus
-            tt_thread = Thread(args=(line, tt_lines), target=self.tagged_trimmed)
-            # 2) generate line so we can get n-gram probs
-            gen_thread = Thread(args=(line, gen_lines), target=self.generated)
-
-            # begin and end
-            tt_thread.start()
-            gen_thread.start()
-            tt_thread.join()
-            gen_thread.join()
-            
-            # means line is not ambiguous, move on to next line
-            if len(tt_lines) == 1:
-              line = corpus.readline()
-              progress += 1
-              continue
-
-            threads = []
-            self.barrier = Barrier(len(gen_lines)-1)
-            for i in range(len(gen_lines)):
-              args = (gen_lines[i], tt_lines[i], progress)
-              t = Thread(args=args, target=self.all_possibilities)
-              t.start()
-              threads.append(t)
-            
-            # -------------------------------
-            # hack since barrier.wait() hangs
-            if not self.barrier.n_waiting:
-              try:
-                self.barrier.abort()
-              except BrokenBarrierError:
-                for t in threads:
-                  t.join()
-            # -------------------------------
-            
-            # setting up for the next line to be read
-            self.normalize_probabilities()
-            self.print_results()
-            self.probabilities.clear()
-
-            # reading next line
             line = corpus.readline()
-            progress += 1
-                        
-            progress_bar(progress, corpus_length) 
+            while line:
+                tt_lines, gen_lines = [], []
+                # 1) gets tagged trimmed version of corpus
+                tt_thread = Thread(args=(line, tt_lines, tt_cmd), target=run_cmd)
 
-    def tagged_trimmed(self, line, tt_lines):
-      cmd = ['apertium', '-d', self.transducer, self.lang_pair + '-expand-tagged']
-      tt = run(cmd, input=line, stdout=PIPE, universal_newlines=True)
-      for res in tt.stdout.split('\n'):
-        tt_lines.append(res)
+                # 2) generate line so we can get n-gram probs
+                gen_thread = Thread(args=(line, gen_lines, gen_cmd), target=run_cmd)
 
-    def generated(self, line, gen_lines):
-      cmd = ['apertium', '-d', self.transducer, self.lang_pair + '-gen-ambig']
-      gen = run(cmd, input=line, stdout=PIPE, universal_newlines=True)
-      for res in gen.stdout.strip().split('\n'):
-        gen_lines.append(res)
+                # begin and end
+                tt_thread.start()
+                gen_thread.start()
+                tt_thread.join()
+                gen_thread.join()
+            
+                # means line is not ambiguous, move on to next line
+                if len(tt_lines) == 1:
+                    line = corpus.readline()
+                    progress += 1
+                    progress_bar(progress, corpus_length)
+                    continue
 
-    def all_possibilities(self, gen_line, tt_line, progress):
+                threads = []
+                self.barrier = Barrier(len(gen_lines)-1)
+                for i in range(len(gen_lines)):
+                    args = (gen_lines[i], tt_lines[i], progress)
+                    t = Thread(args=args, target=self.append_possibilities)
+                    t.start()
+                    threads.append(t)
+
+                # -------------------------------
+                # hack since barrier.wait() hangs
+                if not self.barrier.n_waiting:
+                    try:
+                        self.barrier.abort()
+                    except BrokenBarrierError:
+                        for t in threads:
+                            t.join()
+                # -------------------------------
+
+                # setting up for the next line to be read
+                self.normalize_probabilities()
+                self.print_results()
+                self.probabilities.clear()
+
+                # reading next line
+                line = corpus.readline()
+                progress += 1
+                progress_bar(progress, corpus_length) 
+
+    def append_possibilities(self, gen_line, tt_line, progress):
         tokens = gen_line.split()[2:] # removing nums
         prob = self.get_probability(tokens)
         # get rid of first num
         subnumber = int(tt_line.split('\t')[0].split()[1])
         line = ' '.join(tt_line.split()[2:])
         self.probabilities.append([prob, progress, subnumber, line])
+        
+def trim(string):
+    # remove white space and unknown words (really just *?)
+    return re.sub('[\n\t\v\f\r *]', '', string)
+
+def run_cmd(line, lines, command):
+    proc = run(command, input=line, stdout=PIPE, universal_newlines=True)
+    for result in proc.stdout.strip().split('\n'):
+        lines.append(result)
 
 def progress_bar(progress, length):
     percentage = '{:.1f}'.format(100*progress/length)
-    stars = int(50*progress/length)
+    bar = int(50*progress/length)
     ratio = str(progress) + '/' + str(length)
-    out = '[{}{}] {}% {}'.format(stars*'*', (50-stars)*'-', percentage, ratio)
+    out = '[{}{}] {}% {}'.format(bar*'=', (50-bar)*'-', percentage, ratio)
     print(out, file=sys.stderr, end='\r')
 
 def main():
