@@ -30,20 +30,6 @@ Expect this program to run for many hours. Using 200,000 lines of corpora,
  - ```create.py``` took approximately 20 minutes
 ## How to create -expand-tagged and -gen-ambig modes
 ```
-<mode name="en-pt-expand-tagged" install="yes">
-    <pipeline>
-      <program name="lt-proc">
-        <file name="en-pt.automorf.bin"/>
-      </program>
-      <program name="apertium-tagger -g $2">
-        <file name="en-pt.prob"/>
-      </program>
-      <program name="new_multitrans -m -t">
-        <file name="en-pt.autobil.bin"/>
-      </program>
-    </pipeline>
-  </mode>
-  
   <mode name="en-pt-expand-tagged" install="yes">
     <pipeline>
       <program name="lt-proc">
@@ -52,8 +38,41 @@ Expect this program to run for many hours. Using 200,000 lines of corpora,
       <program name="apertium-tagger -g $2">
         <file name="en-pt.prob"/>
       </program>
-      <program name="new_multitrans -m">
+      <program name="multitrans -m -t -n -f">
         <file name="en-pt.autobil.bin"/>
+      </program>
+    </pipeline>
+  </mode>
+
+  <mode name="en-pt-gen-ambig" install="yes">
+    <pipeline>
+      <program name="lt-proc">
+        <file name="en-pt.automorf.bin"/>
+      </program>
+      <program name="apertium-tagger -g $2">
+        <file name="en-pt.prob"/>
+      </program>
+      <program name="multitrans -m -n -f">
+        <file name="en-pt.autobil.bin"/>
+      </program>
+      <program name="apertium-pretransfer"/>
+      <program name="apertium-transfer -b">
+        <file name="apertium-en-pt.en-pt.t1x"/>
+        <file name="en-pt.t1x.bin"/>
+      </program>
+      <program name="apertium-interchunk">
+        <file name="apertium-en-pt.en-pt.t2x"/>
+        <file name="en-pt.t2x.bin"/>
+      </program>
+      <program name="apertium-postchunk">
+        <file name="apertium-en-pt.en-pt.t3x"/>
+        <file name="en-pt.t3x.bin"/>
+      </program>
+      <program name="lt-proc -g">
+        <file name="en-pt.autogen.bin"/>
+      </program>
+      <program name="lt-proc -p">
+        <file name="en-pt.autopgen.bin"/>
       </program>
     </pipeline>
   </mode>
