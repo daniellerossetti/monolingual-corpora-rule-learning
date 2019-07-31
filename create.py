@@ -1,7 +1,6 @@
 import sys
 
 threshold = 0.9
-ngrams =
 
 print('<rules>')
 ruleno = 0
