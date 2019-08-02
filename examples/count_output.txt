@@ -1,0 +1,50 @@
+0.33958400000000005	0.33958400000000005	^on<pr>$ ^friday<n><sg>$ ^17<num>$ ^december<n><sg>$ ^1999<num>$	on<pr>	a respeito de<pr>
+0.33958400000000005	0.33958400000000005	^on<pr>$ ^friday<n><sg>$ ^17<num>$ ^december<n><sg>$	on<pr>	a respeito de<pr>
+0.33958400000000005	0.33958400000000005	^on<pr>$ ^friday<n><sg>$ ^17<num>$	on<pr>	a respeito de<pr>
+0.34394440542685406	11.006157000000092	^on<pr>$ ^friday<n><sg>$	on<pr>	a respeito de<pr>
+0.34521076168609344	0.34520799999999996	^have<vbhaver><pres>$ ^request<vblex><pp>$ ^a<det><ind><sg>$ ^debate<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.34521076168609344	0.34520799999999996	^request<vblex><pp>$ ^a<det><ind><sg>$ ^debate<n><sg>$ ^on<pr>$ ^this<det><dem><sg>$	on<pr>	a respeito de<pr>
+0.34944965055034977	1.3978000000000002	^a<det><ind><sg>$ ^debate<n><sg>$ ^on<pr>$ ^this<det><dem><sg>$ ^subject<n><sg>$	on<pr>	a respeito de<pr>
+0.34521076168609344	0.34520799999999996	^debate<n><sg>$ ^on<pr>$ ^this<det><dem><sg>$ ^subject<n><sg>$ ^in<pr>$	on<pr>	a respeito de<pr>
+0.34229680522982014	1.0269000000000024	^on<pr>$ ^this<det><dem><sg>$ ^subject<n><sg>$ ^in<pr>$ ^the<det><def><sp>$	on<pr>	a respeito de<pr>
+0.34523553570660703	0.690469	^request<vblex><pp>$ ^a<det><ind><sg>$ ^debate<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.34625053303609493	4.847503999999995	^a<det><ind><sg>$ ^debate<n><sg>$ ^on<pr>$ ^this<det><dem><sg>$	on<pr>	a respeito de<pr>
+0.3458421866100023	3.4584439999999286	^debate<n><sg>$ ^on<pr>$ ^this<det><dem><sg>$ ^subject<n><sg>$	on<pr>	a respeito de<pr>
+0.3430058605446378	2.4010520000000017	^on<pr>$ ^this<det><dem><sg>$ ^subject<n><sg>$ ^in<pr>$	on<pr>	a respeito de<pr>
+0.34361638992217736	26.1148690000002	^a<det><ind><sg>$ ^debate<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3438059131585358	21.316022999999735	^debate<n><sg>$ ^on<pr>$ ^this<det><dem><sg>$	on<pr>	a respeito de<pr>
+0.34403844089495417	35.780023999994214	^on<pr>$ ^this<det><dem><sg>$ ^subject<n><sg>$	on<pr>	a respeito de<pr>
+0.3437199648897024	218.94972900004183	^debate<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.34364367725491984	440.5511640003389	^on<pr>$ ^this<det><dem><sg>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^that<rel><an><mf><sp>$ ^will<vaux><inf>$ ^come<vblex><inf>$ ^up<pr>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^will<vaux><inf>$ ^come<vblex><inf>$ ^up<pr>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^come<vblex><inf>$ ^up<pr>$ ^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^up<pr>$ ^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$ ^which<rel><an><mf><sp>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$ ^which<rel><an><mf><sp>$ ^prpers<prn><subj><p1><mf><sg>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^will<vaux><inf>$ ^come<vblex><inf>$ ^up<pr>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^come<vblex><inf>$ ^up<pr>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^up<pr>$ ^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$ ^which<rel><an><mf><sp>$	on<pr>	a respeito de<pr>
+0.3498942505287473	0.34989599999999993	^come<vblex><inf>$ ^up<pr>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3452271369321577	0.690456	^up<pr>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3445464369690419	1.0336400000000001	^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$	on<pr>	a respeito de<pr>
+0.3423484256079196	15.40572400000106	^up<pr>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.35953087181733545	28.043439999999656	^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.34142721258237213	180.27264400003514	^report<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^programme<n><pl>$ ^come<vblex><pri><p3><sg>$ ^before<pr>$ ^parliament<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^come<vblex><pri><p3><sg>$ ^before<pr>$ ^parliament<n><sg>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^before<pr>$ ^parliament<n><sg>$ ^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^parliament<n><sg>$ ^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$ ^contain<vblex><pri><p3><sg>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$ ^contain<vblex><pri><p3><sg>$ ^a<det><ind><sg>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^come<vblex><pri><p3><sg>$ ^before<pr>$ ^parliament<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^before<pr>$ ^parliament<n><sg>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^parliament<n><sg>$ ^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^on<pr>$ ^thursday<n><sg>$ ^and<cnjcoo>$ ^contain<vblex><pri><p3><sg>$	on<pr>	a respeito de<pr>
+0.3377050131150392	0.3377039999999999	^before<pr>$ ^parliament<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.33970551911655716	0.6794089999999994	^parliament<n><sg>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3423921954669054	40.40232700000091	^parliament<n><sg>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.34043399999999996	0.34043399999999996	^do<vblex><inf>$ ^on<pr>$ ^thursday<n><sg>$	on<pr>	a respeito de<pr>
+0.3422187161897221	4.791060999999947	^do<vblex><inf>$ ^on<pr>$	on<pr>	a respeito de<pr>
+0.33885837200860397	0.6777119999999999	^prpers<prn><obj><p2><mf><sp>$ ^on<pr>$ ^the<det><def><sp>$ ^fact<n><sg>$ ^that<cnjsub>$	on<pr>	a respeito de<pr>
+0.33885837200860397	0.6777119999999999	^on<pr>$ ^the<det><def><sp>$ ^fact<n><sg>$ ^that<cnjsub>$ ^prpers<prn><obj><p2><mf><sp>$	on<pr>	a respeito de<pr>
+0.33885837200860397	0.6777119999999999	^prpers<prn><obj><p2><mf><sp>$ ^on<pr>$ ^the<det><def><sp>$ ^fact<n><sg>$	on<pr>	a respeito de<pr>
