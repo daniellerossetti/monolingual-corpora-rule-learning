@@ -77,11 +77,11 @@ def main():
                     tl = tokens[i].split('/')[1]
                     insert_ngrams(ngrams, frequency, sl, tl, prob) 
  
-          line = sys.stdin.readline()
+        line = sys.stdin.readline()
 
   for ngram in frequency:
       for sl in frequency[ngram]:
-          freq_list  = [(tl, frequency[ngram][sl][tl]) for tl in frequency[sl][ngram]]
+          freq_list  = [(tl, frequency[ngram][sl][tl]) for tl in frequency[ngram][sl]]
           total = sum([freq for _, freq in freq_list])
           max_tl, max_freq = max(freq_list, key=lambda x: x[1])
       
