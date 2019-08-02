@@ -85,7 +85,7 @@ class Scorer:
                 gen_thread.join()
             
                 # means line is not ambiguous, move on to next line
-                if len(tt_lines) == 1:
+                if len(tt_lines) == 1 or len(tt_lines) != len(gen_lines):
                     line = corpus.readline()
                     progress += 1
                     progress_bar(progress, corpus_length)
